@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <script>
+      (function () {
+        function isExt(src, msg, stack) {
+          var s = String(src || '') + ' ' + String(stack || '');
+          var m = String(msg || '');
+          return (
+            s.indexOf('chrome-extension://') !== -1 ||
+            s.indexOf('moz-extension://') !== -1 ||
+            m.indexOf('Failed to connect to MetaMask') !== -1
+          );
+        }
+        window.addEventListener(
+          'error',
+          function (e) {
+            if (isExt(e.filename, e.message, e.error && e.error.stack)) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+            }
+          },
+          true
+        );
+        window.addEventListener(
+          'unhandledrejection',
+          function (e) {
+            var r = e.reason;
+            var msg = typeof r === 'string' ? r : r && r.message;
+            var stack = r && r.stack;
+            if (isExt('', msg, stack)) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+            }
+          },
+          true
+        );
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Twin of the Human Heart</title>
+    <meta
+      name="description"
+      content="An Interactive 3D Cardiovascular Simulation & Research Platform for exploring human heart anatomy, hemodynamics, exercise physiology, and ECG synthesis."
+    />
+    <meta property="og:title" content="Digital Twin of the Human Heart" />
+    <meta
+      property="og:description"
+      content="An Interactive 3D Cardiovascular Simulation & Research Platform for exploring human heart anatomy, hemodynamics, exercise physiology, and ECG synthesis."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-[#060A13] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-100">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
